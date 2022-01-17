@@ -1,0 +1,24 @@
+{
+    "name": "syaifulsz/sszrgnrk",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Syaiful Shah Zinan",
+            "email": "syaifulshahzinan@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/routing": "^5.4",
+        "symfony/http-foundation": "^5.4",
+        "illuminate/database": "^8.79",
+        "illuminate/pagination": "^8.79",
+        "illuminate/cache": "^8.79",
+        "illuminate/filesystem": "^8.79",
+        "symfony/cache": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    }
+}
