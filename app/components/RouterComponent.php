@@ -137,9 +137,7 @@ class RouterComponent extends ComponentAbstract implements RouterInterface
     public function listen()
     {
         try {
-
             return $this->start();
-
         } catch ( ResourceNotFoundException $e ) {
             $this->addError( $e );
         }

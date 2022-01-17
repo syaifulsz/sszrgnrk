@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use app\AppCli;
+
+$app = new AppCli( [
+    'root_dir'   => __DIR__,
+    'app_dir'    => __DIR__ . '/app',
+    'public_dir' => __DIR__ . '/public',
+    'config_dir' => __DIR__ . '/app/configs',
+    'view_dir'   => __DIR__ . '/app/views',
+    'app_env'    => getenv( 'SITE_ENV' ),
+] );
+$app->run();

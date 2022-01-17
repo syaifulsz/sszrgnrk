@@ -21,6 +21,11 @@ class Config extends ComponentAbstract
     public $route;
 
     /**
+     * @var RouteCliParam
+     */
+    public $routeCli;
+
+    /**
      * @var DatabaseParam
      */
     public $database;
