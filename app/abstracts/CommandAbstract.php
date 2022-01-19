@@ -15,6 +15,7 @@ use app\traits\ComponentTrait;
 use app\services\Service;
 use Carbon\Carbon;
 use Symfony\Component\Console\Input\InputInterface;
+use app\components\ConsoleColorInterface;
 
 /**
  * Abstract CommandAbstract
