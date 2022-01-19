@@ -5,6 +5,7 @@ namespace app\components;
 use app\abstracts\ComponentAbstract;
 use app\App;
 use app\components\configs\Config;
+use app\components\StrComponent;
 
 /**
  * Class ConfigComponent
@@ -18,10 +19,12 @@ class ConfigComponent extends ComponentAbstract implements ConfigInterface
     /**
      * @var Config
      */
-    public $configs = [];
+    public $configs;
     public function buildConfigs()
     {
-        $cachedConfigFile = "{$this->config_dir}/cached/{$this->app_env}.json";
+        $env = strtolower( $this->app_env );
+        $cachedConfigFile = "{$this->config_dir}/cached/{$env}.json";
+
         if ( !file_exists( $cachedConfigFile ) ) {
             $excludes = [ App::ENVIRONMENT_DEVELOPMENT, App::ENVIRONMENT_STAGING, App::ENVIRONMENT_PRODUCTION ];
             $configs = [];
@@ -34,14 +37,14 @@ class ConfigComponent extends ComponentAbstract implements ConfigInterface
                 }
             }
 
-            $envConfigFile = "{$this->config_dir}/". strtolower( $this->app_env ) .".php";
+            $envConfigFile = "{$this->config_dir}/{$env}.php";
             if ( file_exists( $envConfigFile ) ) {
                 $envConfigs = require $envConfigFile;
                 foreach ( $envConfigs as $fileName => $config ) {
                     $configs[ $fileName ] = array_replace_recursive( $configs[ $fileName ], $config );
                 }
             }
-            file_put_contents( $cachedConfigFile, json_encode( $configs ), FILE_APPEND );
+            file_put_contents( $cachedConfigFile, json_encode( $configs ) );
         } else {
             $configs = json_decode( file_get_contents( $cachedConfigFile ), true );
         }

@@ -2,8 +2,6 @@
 
 namespace app\components\configs;
 
-use app\traits\SingletonTrait;
-
 /**
  * Class ConfigParam
  * @package app\components\configs
@@ -19,4 +17,9 @@ class AppParam extends Param
      * @var string
      */
     public $name;
+
+    /**
+     * @var string
+     */
+    public $version = '0.0.0';
 }

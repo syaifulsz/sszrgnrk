@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'appSetup' => [ 'app:setup', [ '\\app\\commands\\App\\SetupController', 'index' ] ],
+    'appHelp'  => [ 'help',      [ '\\app\\commands\\App\\HelpCommand',  'index' ] ],
+    'appSetup' => [ 'app:setup', [ '\\app\\commands\\App\\SetupCommand', 'index' ] ],
 ];
