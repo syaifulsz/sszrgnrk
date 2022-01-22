@@ -11,11 +11,13 @@ use app\components\RequestCliComponent;
 use app\components\StrComponent;
 use app\services\Cache\MemcachedService;
 use app\services\Config\ConfigService;
+use app\services\Request\RequestService;
 use app\traits\ComponentTrait;
 use app\services\Service;
 use Carbon\Carbon;
 use Symfony\Component\Console\Input\InputInterface;
 use app\components\ConsoleColorInterface;
+use app\components\configs\Config;
 
 /**
  * Abstract CommandAbstract
@@ -60,7 +62,7 @@ LOGO;
     public $config;
 
     /**
-     * @var \app\components\configs\Config|array
+     * @var Config
      */
     public $configs;
 
@@ -145,7 +147,7 @@ LOGO;
         $this->cache   = $this->service->getService( MemcachedService::INSTANCE_NAME );
 
         // command request
-        $this->request = RequestCliComponent::createFromGlobals();
+        $this->request = $this->service->getService( RequestService::INSTANCE_NAME );
 
         // command output
         $this->output = new ConsoleOutputComponent();

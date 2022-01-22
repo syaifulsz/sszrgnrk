@@ -3,6 +3,7 @@
 namespace app\commands\App;
 
 use app\abstracts\CommandAbstract;
+use app\components\ConsoleOutputInterface;
 use app\components\RequestCliComponent;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,10 +18,12 @@ class HelpCommand extends CommandAbstract
      * @param OutputInterface $output
      * @return string
      */
-    public function actionIndex( RequestCliComponent $request, OutputInterface $output )
+    public function actionIndex( RequestCliComponent $request, ConsoleOutputInterface $output )
     {
-        $output->writeln( __METHOD__ );
-        $output->writeln( $request->toJson() );
+        // $output->writeColor( '<info>Hello!</info>' );
+        // $output->writeColor( '<danger>This is an ERROR!</danger>' );
+        // $output->writeln( __METHOD__ );
+        // $output->writeln( $request->toJson() );
 
         return self::STATUS_SUCCESS;
     }

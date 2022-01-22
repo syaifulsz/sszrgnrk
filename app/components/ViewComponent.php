@@ -5,6 +5,8 @@ namespace app\components;
 use app\abstracts\ComponentAbstract;
 use app\components\configs\Config;
 use app\services\Config\ConfigService;
+use app\services\Localization\LocalizationService;
+use app\services\Request\RequestService;
 use app\services\Service;
 
 /**
@@ -21,24 +23,52 @@ class ViewComponent extends ComponentAbstract implements ViewInterface
     protected function init()
     {
         parent::init();
+
+        // setup service
         $this->service = Service::getInstance();
-        $this->configs = $this->service->getService( ConfigService::INSTANCE_NAME );
-        $this->config = $this->configs->getConfigs();
-        $this->request = RequestComponent::createFromGlobals();
+
+        // setup config
+        $this->config  = $this->service->getService( ConfigService::INSTANCE_NAME );
+        $this->configs = $this->config->getConfigs();
+
+        // setup request
+        $this->request = $this->service->getService( RequestService::INSTANCE_NAME );
+    }
+
+    /**
+     * @return LocalizationService
+     */
+    public function getLocalization()
+    {
+        return $this->service->getService( LocalizationService::INSTANCE_NAME );
+    }
+
+    /**
+     * @param string $str
+     * @param string $default
+     * @param string $local
+     * @return string
+     */
+    public function t( string $str, string $default = '', string $local = '' )
+    {
+        if ( $service = $this->getLocalization() ) {
+            return $service->t( $str, $default, $local );
+        }
+        return '';
     }
 
     /**
      * @var ConfigService
      */
-    public $configs;
+    public $config;
 
     /**
      * @var Config
      */
-    public $config;
+    public $configs;
 
     /**
-     * @var RequestComponent
+     * @var RequestService
      */
     public $request;
 

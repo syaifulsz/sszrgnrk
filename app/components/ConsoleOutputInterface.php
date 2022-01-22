@@ -11,4 +11,5 @@ use Symfony\Component\Console\Output\OutputInterface;
 interface ConsoleOutputInterface extends OutputInterface
 {
     public function ln();
+    public function writeColor( $messages, string $color = '', string $bgColor = '' );
 }

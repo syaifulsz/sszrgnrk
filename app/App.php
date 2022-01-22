@@ -4,6 +4,7 @@ namespace app;
 
 use app\abstracts\ComponentAbstract;
 use app\components\ConfigComponent;
+use app\components\LocalizationInterface;
 use app\components\RequestComponent;
 use app\components\RouterComponent;
 use app\components\ViewComponent;
@@ -11,6 +12,8 @@ use app\services\Config\ConfigService;
 use app\services\Database\DatabaseService;
 use app\services\Database\DatabaseSecondaryService;
 use app\services\Cache\MemcachedService;
+use app\services\Localization\LocalizationService;
+use app\services\Request\RequestService;
 use app\services\Router\RouterService;
 use app\services\Service;
 use app\services\View\ViewService;
@@ -66,6 +69,14 @@ class App extends ComponentAbstract
         // initiate app config & config service registration
         $config = new ConfigService( $props );
         $this->service->addService( $config );
+
+        // initiate app request & request service registration
+        $request = RequestService::createFromGlobals();
+        $this->service->addService( $request, [], RequestService::INSTANCE_NAME );
+
+        // initiate app localization & localization service registration
+        $localization = new LocalizationService();
+        $this->service->addService( $localization );
 
         // initiate app view & view service registration
         $view = new ViewService( $props );

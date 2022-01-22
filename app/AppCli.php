@@ -6,6 +6,7 @@ use app\services\Config\ConfigService;
 use app\services\Database\DatabaseService;
 use app\services\Database\DatabaseSecondaryService;
 use app\services\Cache\MemcachedService;
+use app\services\Localization\LocalizationService;
 use app\services\Router\RouterCliService;
 use app\services\Service;
 
@@ -32,6 +33,10 @@ class AppCli extends App
         // initiate app config & config service registration
         $config = new ConfigService( $props );
         $this->service->addService( $config );
+
+        // initiate app localization & localization service registration
+        $localization = new LocalizationService();
+        $this->service->addService( $localization );
 
         // initiate app router & router service registration
         $router = new RouterCliService();

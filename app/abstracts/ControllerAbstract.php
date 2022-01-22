@@ -8,10 +8,11 @@ use app\components\StrComponent;
 use app\components\ViewComponent;
 use app\services\Cache\MemcachedService;
 use app\services\Config\ConfigService;
+use app\services\Request\RequestService;
 use app\services\View\ViewService;
 use app\traits\ComponentTrait;
 use app\services\Service;
-use Symfony\Component\Cache\Adapter\MemcachedAdapter;
+use app\components\configs\Config;
 
 /**
  * Abstract ControllerAbstract
@@ -37,14 +38,14 @@ abstract class ControllerAbstract
     public $config;
 
     /**
+     * @var Config
+     */
+    public $configs;
+
+    /**
      * @var ViewComponent
      */
     public $view;
-
-    /**
-     * @var \app\components\configs\Config|array
-     */
-    public $configs;
 
     /**
      * @var RequestComponent
@@ -84,7 +85,7 @@ abstract class ControllerAbstract
         $this->cache   = $this->service->getService( MemcachedService::INSTANCE_NAME );
 
         // controller request
-        $this->request = RequestComponent::createFromGlobals();
+        $this->request = $this->service->getService( RequestService::INSTANCE_NAME );
 
         $this->setLayout( 'main' );
 
