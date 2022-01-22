@@ -34,4 +34,9 @@ class Config extends ComponentAbstract
      * @var MemcachedParam
      */
     public $memcached;
+
+    /**
+     * @var LocalizationParam
+     */
+    public $localization;
 }

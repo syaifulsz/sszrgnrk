@@ -11,10 +11,13 @@ use app\components\RequestCliComponent;
 use app\components\StrComponent;
 use app\services\Cache\MemcachedService;
 use app\services\Config\ConfigService;
+use app\services\Request\RequestService;
 use app\traits\ComponentTrait;
 use app\services\Service;
 use Carbon\Carbon;
 use Symfony\Component\Console\Input\InputInterface;
+use app\components\ConsoleColorInterface;
+use app\components\configs\Config;
 
 /**
  * Abstract CommandAbstract
@@ -25,6 +28,9 @@ abstract class CommandAbstract
     const STATUS_SUCCESS = 'STATUS_SUCCESS';
     const STATUS_UNKNOWN = 'STATUS_UNKNOWN';
     const STATUS_ERROR   = 'STATUS_ERROR';
+    const STATUS_SUCCESS_NAME = 'Success';
+    const STATUS_UNKNOWN_NAME = 'Unknown';
+    const STATUS_ERROR_NAME   = 'Error';
 
     use ComponentTrait;
 
@@ -56,7 +62,7 @@ LOGO;
     public $config;
 
     /**
-     * @var \app\components\configs\Config|array
+     * @var Config
      */
     public $configs;
 
@@ -141,7 +147,7 @@ LOGO;
         $this->cache   = $this->service->getService( MemcachedService::INSTANCE_NAME );
 
         // command request
-        $this->request = RequestCliComponent::createFromGlobals();
+        $this->request = $this->service->getService( RequestService::INSTANCE_NAME );
 
         // command output
         $this->output = new ConsoleOutputComponent();
@@ -179,7 +185,9 @@ LOGO;
     {
         $beginAtTime = Carbon::now()->format( 'Y-m-d g:i A' );
         $command = $this->request->command;
-        $controller = __CLASS__;
+
+        $refClass = new \ReflectionClass( $this );
+        $controller = $refClass->getName();
 
         $actionMethod = 'action' . StrComponent::studly( $method );
 
@@ -198,10 +206,10 @@ LOGO;
         try {
             $status = call_user_func_array( [ $this, $actionMethod ], array_merge( [ 'request' => $this->request, 'output' => $this->output ], $args ) );
         } catch ( \Error $e ) {
-            $this->output->writeln( "[RGNRK] ERROR: Message " . $e->getMessage() );
-            $this->output->writeln( "[RGNRK] ERROR: Line    " . $e->getLine() );
-            $this->output->writeln( "[RGNRK] ERROR: File    " . $e->getFile() );
-            $this->output->writeln( "[RGNRK] ERROR: Code    " . $e->getCode() );
+            $this->output->writeColor( "<danger>[RGNRK] ERROR: Message " . $e->getMessage() . '</danger>' );
+            $this->output->writeColor( "<danger>[RGNRK] ERROR: Line    " . $e->getLine() . '</danger>' );
+            $this->output->writeColor( "<danger>[RGNRK] ERROR: File    " . $e->getFile() . '</danger>' );
+            $this->output->writeColor( "<danger>[RGNRK] ERROR: Code    " . $e->getCode() . '</danger>' );
             $this->output->ln();
         }
 
@@ -218,19 +226,40 @@ LOGO;
         $this->output->writeln( "[RGNRK] Time elapsed: {$execTime} min" );
 
         if ( is_null( $status ) ) {
-            $this->output->writeln( "[RGNRK] WARNING:      Command need to return STATUS_SUCCESS or STATUS_ERROR!" );
+            $this->output->writeln( "<warning>[RGNRK] WARNING:      Command need to return STATUS_SUCCESS or STATUS_ERROR!</warning>" );
             $status = self::STATUS_UNKNOWN;
         }
 
         if ( !$status && ( $errors = $this->getErrorMessages() ) ) {
             foreach ( $errors as $error ) {
-                $this->output->writeln( "[RGNRK] ERROR:       {$error}" );
+                $this->output->writeColor( "<danger>[RGNRK] ERROR:       {$error}</danger>" );
             }
         }
 
-        $this->output->writeln( "[RGNRK] Status:       {$status}" );
+        switch ( $status ) {
+            case self::STATUS_SUCCESS :
+                $statusColor = 'success';
+                break;
+            case self::STATUS_ERROR :
+                $statusColor = 'danger';
+                break;
+            default :
+                $statusColor = 'warning';
+        }
+
+        $statusName = $this->getStatusName( $status );
+        $this->output->writeColor( "<{$statusColor}>[RGNRK] Status:       {$statusName}</{$statusColor}>" );
         $this->output->ln();
 
         return $status;
+    }
+
+    /**
+     * @param string $status
+     * @return string
+     */
+    public function getStatusName( string $status )
+    {
+        return constant( "self::{$status}_NAME" );
     }
 }

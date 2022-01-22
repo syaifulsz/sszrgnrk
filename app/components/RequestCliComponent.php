@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
  * Class RequestCliComponent
  * @package app\components
  */
-class RequestCliComponent extends ComponentAbstract
+class RequestCliComponent extends ComponentAbstract implements RequestCliInterface
 {
     /**
      * @var string

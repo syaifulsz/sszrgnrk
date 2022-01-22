@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38d0e5fe319ed25bbd93ac091c278a84",
+    "content-hash": "f453de19fe9b707fe59b968bbc2efac4",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -897,6 +897,54 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "simpleregex/srl-php",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SimpleRegex/SRL-PHP.git",
+                "reference": "90a57881df6b21f2378edf7a7b62d596bf676e7a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SimpleRegex/SRL-PHP/zipball/90a57881df6b21f2378edf7a7b62d596bf676e7a",
+                "reference": "90a57881df6b21f2378edf7a7b62d596bf676e7a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SRL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Karim Geiger",
+                    "email": "karim@tyvr.net"
+                }
+            ],
+            "description": "Simple Regex Language",
+            "support": {
+                "issues": "https://github.com/SimpleRegex/SRL-PHP/issues",
+                "source": "https://github.com/SimpleRegex/SRL-PHP/tree/master"
+            },
+            "time": "2016-10-13T14:45:16+00:00"
         },
         {
             "name": "symfony/cache",

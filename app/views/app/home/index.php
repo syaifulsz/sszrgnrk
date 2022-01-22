@@ -17,6 +17,12 @@ use app\components\ViewComponent;
     <div><strong>Components</strong></div>
     <ul>
         <li>Config</li>
+        <li>Localization
+            <ul>
+                <li><span class="text-muted">Code:</span> <?= $this->getLocalization()->default ?></li>
+                <li><span class="text-muted">appHome:</span> <?= $this->t( 'appHome' ) ?></li>
+            </ul>
+        </li>
         <li>Router</li>
         <li>Router Cli</li>
         <li>Route Item</li>

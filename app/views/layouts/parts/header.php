@@ -12,5 +12,5 @@ use app\components\ViewComponent;
         <span class="text-muted" style="opacity: 0.35;">SSZ</span>
         <span>RGNRK</span>
     </div>
-    <div><?= $this->config->app->version ?></div>
+    <div><?= $this->configs->app->version ?></div>
 </div>

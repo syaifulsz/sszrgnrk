@@ -5,6 +5,8 @@ namespace app\components;
 use app\abstracts\ComponentAbstract;
 use app\components\configs\Config;
 use app\services\Config\ConfigService;
+use app\services\Localization\LocalizationService;
+use app\services\Request\RequestService;
 use app\services\Service;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -35,7 +37,7 @@ class RouterComponent extends ComponentAbstract implements RouterInterface
     public $context;
 
     /**
-     * @var Request
+     * @var RequestService
      */
     public $request;
 
@@ -43,6 +45,11 @@ class RouterComponent extends ComponentAbstract implements RouterInterface
      * @var Config
      */
     public $configs;
+
+    /**
+     * @var LocalizationService
+     */
+    public $localization;
 
     protected function init()
     {
@@ -52,9 +59,10 @@ class RouterComponent extends ComponentAbstract implements RouterInterface
 
         $this->collection = new RouteCollection();
         $this->context = new RequestContext();
-        $this->request = Request::createFromGlobals();
+        $this->request = $this->service->getService( RequestService::INSTANCE_NAME );
         $this->context->fromRequest( $this->request );
         $this->configs = $this->service->getService( ConfigService::INSTANCE_NAME )->getConfigs();
+        $this->localization = $this->service->getService( LocalizationService::INSTANCE_NAME );
         $this->setup();
     }
 
@@ -71,6 +79,7 @@ class RouterComponent extends ComponentAbstract implements RouterInterface
         if ( !$this->routes ) {
             $routes = [];
             foreach ( $this->configs->route->toArray() as $name => $rule ) {
+
                 if ( empty( $rule[ 1 ][ 1 ] ) ) {
                     throw new \Error( "{$name} are missing method name!" );
                 }
@@ -129,6 +138,13 @@ class RouterComponent extends ComponentAbstract implements RouterInterface
 
         // Find the current route
         $parameters = $matcher->match( $this->context->getPathInfo() );
+        
+        // Set router parameter to Request
+        $this->request->setRouterParameter( $parameters );
+
+        if ( isset( $parameters[ LocalizationInterface::ROUTE_PARAM_LOCALIZATION_DEFAULT ] ) ) {
+            $this->localization->setDefault( $parameters[ LocalizationInterface::ROUTE_PARAM_LOCALIZATION_DEFAULT ] );
+        }
 
         // Pass an array for arguments
         return call_user_func_array( [ new $parameters[ 'controller' ], $parameters[ 'method' ] ], $parameters );
