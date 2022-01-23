@@ -4,8 +4,6 @@ namespace app;
 
 use app\abstracts\ComponentAbstract;
 use app\components\ConfigComponent;
-use app\components\LocalizationInterface;
-use app\components\RequestComponent;
 use app\components\RouterComponent;
 use app\components\ViewComponent;
 use app\services\Config\ConfigService;

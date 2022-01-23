@@ -7,6 +7,7 @@ use app\services\Database\DatabaseService;
 use app\services\Database\DatabaseSecondaryService;
 use app\services\Cache\MemcachedService;
 use app\services\Localization\LocalizationService;
+use app\services\Request\RequestCliService;
 use app\services\Router\RouterCliService;
 use app\services\Service;
 
@@ -41,6 +42,10 @@ class AppCli extends App
         // initiate app router & router service registration
         $router = new RouterCliService();
         $this->service->addService( $router );
+
+        // initiate app request & request service registration
+        $request = RequestCliService::createFromGlobals();
+        $this->service->addService( $request, [], RequestCliService::INSTANCE_NAME );
 
         $this->config = $this->service->getService( ConfigService::INSTANCE_NAME );
         $this->router = $this->service->getService( RouterCliService::INSTANCE_NAME );

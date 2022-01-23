@@ -11,12 +11,11 @@ use app\components\RequestCliComponent;
 use app\components\StrComponent;
 use app\services\Cache\MemcachedService;
 use app\services\Config\ConfigService;
-use app\services\Request\RequestService;
+use app\services\Request\RequestCliService;
 use app\traits\ComponentTrait;
 use app\services\Service;
 use Carbon\Carbon;
 use Symfony\Component\Console\Input\InputInterface;
-use app\components\ConsoleColorInterface;
 use app\components\configs\Config;
 
 /**
@@ -147,7 +146,7 @@ LOGO;
         $this->cache   = $this->service->getService( MemcachedService::INSTANCE_NAME );
 
         // command request
-        $this->request = $this->service->getService( RequestService::INSTANCE_NAME );
+        $this->request = $this->service->getService( RequestCliService::INSTANCE_NAME );
 
         // command output
         $this->output = new ConsoleOutputComponent();
@@ -212,6 +211,8 @@ LOGO;
             $this->output->writeColor( "<danger>[RGNRK] ERROR: Code    " . $e->getCode() . '</danger>' );
             $this->output->ln();
         }
+
+        $this->output->ln( 2 );
 
         $endAtTime = Carbon::now()->format( 'Y-m-d g:i A' );
         $endAt = microtime( true );
